@@ -5,6 +5,14 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('songhop', ['ionic', 'songhop.controllers'])
 
+.constant('SERVER', {
+  // if using local server
+  //url: 'http://localhost:3000'
+
+  // if using our public heroku server
+  url: 'https://ionic-songhop.herokuapp.com'
+})
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -47,5 +55,8 @@ $stateProvider
     }
   })
 
+
   $urlRouterProvider.otherwise('/tab/discover');
+ 
 });
+
