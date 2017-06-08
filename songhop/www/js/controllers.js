@@ -79,12 +79,18 @@ Controller for the discover page
 /*
 Controller for the favorites page
 */
-.controller('FavoritesCtrl', function($scope, User) {
+.controller('FavoritesCtrl', function($scope, User, $window) {
   // get the list of our favorites from the user service
    $scope.removeSong = function(song, index) {
     User.removeSongFromFavorites(song, index);
   }
+
+  $scope.openSong = function(song) {
+    $window.open(song.open_url, "_system");
+  }
+
   $scope.favorites = User.favorites;
+
 
 })
 
@@ -92,15 +98,19 @@ Controller for the favorites page
 /*
 Controller for our tab bar
 */
-.controller('TabsCtrl', function($scope, Recommendations) {
+.controller('TabsCtrl', function($scope, User, Recommendations) {
   // stop audio when going to favorites page
   
+  $scope.favCount = User.favoriteCount;
+
   $scope.enteringFavorites = function() {
+    User.newFavorites = 0;
     Recommendations.haltAudio();
+  }
 
     $scope.leavingFavorites = function() {
     Recommendations.init();
-  }
+  
   }
 
 });
