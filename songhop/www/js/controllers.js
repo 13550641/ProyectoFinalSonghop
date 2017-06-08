@@ -4,13 +4,39 @@ angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 /*
 Controller for the discover page
 */
-.controller('DiscoverCtrl', function($scope, $timeout, User, Recommendations) {
-  // our first three songs
-    Recommendations.init()
-    .then(function(){
-      $scope.currentSong = Recommendations.queue[0];
-      Recommendations.playCurrentSong();
+.controller('DiscoverCtrl', function($scope, $timeout, $ionicLoading, User, Recommendations) {
+ 
+ var showLoading = function() {
+    $ionicLoading.show({
+      template: '<i class="ion-loading-c"></i>',
+      noBackdrop: true
     });
+  }
+
+  var hideLoading = function() {
+    $ionicLoading.hide();
+  }
+
+  // set loading to true first time while we retrieve songs from server.
+  showLoading();
+ 
+
+  Recommendations.init()
+    .then(function(){
+
+      $scope.currentSong = Recommendations.queue[0];
+
+      return Recommendations.playCurrentSong();
+
+    })
+    .then(function(){
+      // turn loading off
+      hideLoading();
+      $scope.currentSong.loaded = true;
+    });
+
+
+   
 
   
 
@@ -31,9 +57,14 @@ Controller for the discover page
 
       // update current song in scope
       $scope.currentSong = Recommendations.queue[0];
+       $scope.currentSong.loaded = false;
 
     }, 250);
-  };
+     Recommendations.playCurrentSong().then(function() {
+    $scope.currentSong.loaded = true;
+
+  });
+   }
 
   $scope.nextAlbumImg = function() {
     if (Recommendations.queue.length > 1) {
@@ -63,6 +94,7 @@ Controller for our tab bar
 */
 .controller('TabsCtrl', function($scope, Recommendations) {
   // stop audio when going to favorites page
+  
   $scope.enteringFavorites = function() {
     Recommendations.haltAudio();
 

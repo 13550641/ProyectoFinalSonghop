@@ -5,13 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('songhop', ['ionic', 'songhop.controllers'])
 
-.constant('SERVER', {
-  // if using local server
-  //url: 'http://localhost:3000'
 
-  // if using our public heroku server
-  url: 'https://ionic-songhop.herokuapp.com'
-})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -26,6 +20,14 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
     
 
   });
+})
+
+.constant('SERVER', {
+  // if using local server
+  //url: 'http://localhost:3000'
+
+  // if using our public heroku server
+  url: 'https://ionic-songhop.herokuapp.com'
 })
 
 .config(function($stateProvider, $urlRouterProvider) {

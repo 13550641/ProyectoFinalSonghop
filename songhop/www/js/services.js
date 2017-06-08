@@ -1,9 +1,15 @@
 angular.module('songhop.services', [])
+
+
+
 .factory('User', function() {
 
   var o = {
     favorites: []
+    
   }
+  
+   
 
   o.addSongToFavorites = function(song) {
     // make sure there's a song to add
@@ -11,6 +17,7 @@ angular.module('songhop.services', [])
 
     // add to favorites array
     o.favorites.unshift(song);
+     
   }
   
   o.removeSongFromFavorites = function(song, index) {
@@ -23,11 +30,11 @@ angular.module('songhop.services', [])
   return o;
 })
 
-.factory('Recommendations', function($http, SERVER) {
+.factory('Recommendations', function($http, $q, SERVER) {
+  var media;
   var o = {
     queue: []
   };
-  var media;
 
   o.playCurrentSong = function() {
     var defer = $q.defer();
@@ -84,5 +91,6 @@ angular.module('songhop.services', [])
       o.getNextSongs();
     }
   }
+
   return o;
 });
