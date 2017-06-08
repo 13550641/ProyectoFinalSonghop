@@ -33,11 +33,24 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
 $stateProvider
 .state('tab', {
-  url: '/tab',
-  abstract: true,
-  templateUrl: 'templates/tabs.html',
-  controller: 'TabsCtrl'
-})
+    url: '/tab',
+    abstract: true,
+    templateUrl: 'templates/tabs.html',
+    controller: 'TabsCtrl',
+    // don't load the state until we've populated our User, if necessary.
+    resolve: {
+      populateSession: function(User) {
+        return User.checkSession();
+      }
+    },
+    onEnter: function($state, User){
+      User.checkSession().then(function(hasSession) {
+        if (!hasSession) $state.go('splash');
+      });
+    }
+  })
+
+
 .state('tab.discover', {
     url: '/discover',
     views: {
@@ -59,8 +72,14 @@ $stateProvider
 .state('splash', {
     url: '/',
     templateUrl: 'templates/splash.html',
-    controller: 'SplashCtrl'
+    controller: 'SplashCtrl',
+    onEnter: function($state, User){
+      User.checkSession().then(function(hasSession) {
+        if (hasSession) $state.go('tab.discover');
+      });
+    }
   })
+  
 
   $urlRouterProvider.otherwise('/');
  
