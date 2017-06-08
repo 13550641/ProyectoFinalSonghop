@@ -56,9 +56,13 @@ $stateProvider
       }
     }
   })
+.state('splash', {
+    url: '/',
+    templateUrl: 'templates/splash.html',
+    controller: 'SplashCtrl'
+  })
 
-
-  $urlRouterProvider.otherwise('/tab/discover');
+  $urlRouterProvider.otherwise('/');
  
 });
 
